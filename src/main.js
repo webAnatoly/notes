@@ -1,4 +1,5 @@
 import Vue from 'vue'
+import store from './store/index'
 import VueRouter from 'vue-router'
 import App from './App.vue'
 import Authorization from "./components/Authorization.vue";
@@ -25,5 +26,6 @@ const router = new VueRouter({
 
 new Vue({
   router,
+  store,
   render: h => h(App),
 }).$mount('#app')

@@ -1,9 +1,18 @@
 <template>
   <div>
     <h1>{{ msg }}</h1>
-    <p>
-      Экран добавления новой заметки
-    </p>
+
+    <form action="">
+
+      <label for="entry-name">Название заметки</label>
+      <input type="text" id="entry-name">
+
+      <label for="entry-description">Описание заметки</label>
+      <textarea name="" id="entry-description" cols="90" rows="30"></textarea>
+      <input type="button" value="Сохранить">
+
+    </form>
+
   </div>
 </template>
 
@@ -31,5 +40,12 @@ li {
 }
 a {
   color: #42b983;
+}
+form {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  width: 100%;
 }
 </style>
