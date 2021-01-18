@@ -6,6 +6,9 @@ import Authorization from "./components/Authorization.vue";
 import NewNote from "./components/NewNote.vue";
 import Notes from "./components/Notes.vue";
 
+import firebase from "firebase";
+import {config as firebaseConfig} from '@/api/firebase/db.js';
+
 Vue.config.productionTip = false;
 
 Vue.use(VueRouter);
@@ -28,4 +31,7 @@ new Vue({
   router,
   store,
   render: h => h(App),
+  created() {
+    firebase.initializeApp(firebaseConfig);
+  }
 }).$mount('#app')
