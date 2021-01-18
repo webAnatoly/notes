@@ -15,7 +15,7 @@
 
 <script>
 import firebase from 'firebase';
-import * as firebaseui from "firebaseui";
+import * as firebaseui from "firebaseui/dist/npm__ru";
 import "firebaseui/dist/firebaseui.css";
 
 export default {
