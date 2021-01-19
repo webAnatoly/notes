@@ -16,7 +16,7 @@ export default {
   name: "Navbar",
   computed: {
     msg () {
-      return this.$store.state.user ? "Выйти" : "Войти"
+      return this.$store.state.user ? "Выйти" : "Авторизация"
     }
   },
 }

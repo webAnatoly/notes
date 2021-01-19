@@ -19,21 +19,24 @@ export default {
     if (!ui) {
       ui = new firebaseui.auth.AuthUI(firebase.auth());
     }
-    ui.start('#firebaseui-auth-container', {
-      signInSuccessUrl: '#/',
-      signInOptions: [
-        firebase.auth.EmailAuthProvider.PROVIDER_ID
-      ],
-      callbacks: {
-        signInSuccessWithAuthResult: function (authResult) {
-          // this.$emit('updateAuthResult', authResult)
-          // this.foo = 'bar'
-          console.log(authResult)
-          return true
-        }
-      }
-      // Other config options...
-    });
+
+    // Если авторизированный пользователь в браузере наберет путь /auth то он разлогинится
+    if (this.$store.state.user) {
+      // logout
+      firebase.auth().signOut().then(() => {
+        window.location.reload();
+      })
+    } else {
+      // запуск формы авторизации
+      ui.start('#firebaseui-auth-container', {
+        signInSuccessUrl: '#/',
+        signInOptions: [
+          firebase.auth.EmailAuthProvider.PROVIDER_ID
+        ],
+        // Other config options...
+      });
+    }
+
   },
 }
 </script>
