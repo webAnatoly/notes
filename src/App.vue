@@ -1,5 +1,6 @@
 <template>
   <div id="app">
+    <InfoPanel />
     <Overlay v-show="!this.$store.state.isAppInitialized" showLoader/>
     <div class="header">
       <h1>Хранитель заметок</h1>
@@ -19,12 +20,14 @@
 
 <script>
 import Overlay from "@/components/Overlay";
+import InfoPanel from "@/components/InfoPanel";
 import Navbar from './components/Navbar.vue'
 
 export default {
   name: 'App',
   components: {
     Overlay,
+    InfoPanel,
     Navbar: Navbar,
   },
 }
@@ -37,7 +40,7 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
+  margin-top: 0;
 }
 
 .screen-wrapper {
@@ -80,5 +83,14 @@ body {
   flex-direction: column;
   justify-content: space-between;
   font-size: 1.6rem;
+}
+
+a,
+a:link,
+a:visited,
+a:hover,
+a:active {
+  color: #0c5ca0;
+  text-decoration: none;
 }
 </style>
