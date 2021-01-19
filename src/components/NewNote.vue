@@ -1,7 +1,5 @@
 <template>
-  <div>
-    <h1>{{ msg }}</h1>
-
+  <div class="new-note">
     <form action="">
 
       <label for="entry-name">Название заметки</label>
@@ -27,8 +25,8 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-h3 {
-  margin: 40px 0 0;
+.new-note {
+  padding: 3rem;
 }
 ul {
   list-style-type: none;

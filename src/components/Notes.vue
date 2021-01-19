@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="notes">
 <!--    <p v-if="notes">Если заметки есть, то будем выводить заметки.-->
 <!--      Ну или подключать компонент выводящий заметки.</p>-->
 <!--    <p v-else>Создайте свою первую заметку. <router-link to="/add">Создать</router-link></p>-->
@@ -14,5 +14,7 @@ export default {
 </script>
 
 <style scoped>
-
+  .notes {
+    padding: 3rem;
+  }
 </style>
