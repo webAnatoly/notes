@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-
+    <Overlay v-show="!this.$store.state.isAppInitialized" showLoader/>
     <div class="header">
       <h1>Хранитель заметок</h1>
       <Navbar />
@@ -18,14 +18,15 @@
 </template>
 
 <script>
-// import HelloWorld from './components/HelloWorld.vue'
+import Overlay from "@/components/Overlay";
 import Navbar from './components/Navbar.vue'
 
 export default {
   name: 'App',
   components: {
+    Overlay,
     Navbar: Navbar,
-  }
+  },
 }
 </script>
 
@@ -47,7 +48,37 @@ export default {
   margin-top: 20px;
 }
 
+*,
+*::after,
+*::before {
+  margin: 0;
+  padding: 0;
+  box-sizing: inherit;
+  /* все элементы (включая псевдо элементы всех элементов ::before и ::after)
+  будут наследовать свойство box-sizing: border-box; от body */
+}
+
+html {
+  font-size: 62.5%; /* This defines what 1rem is */
+
+  /* Если для элемента html установить font-size в процентах, то процент берется от шрифта браузера по умолчанию.
+  Браузеры по умолчанию ставят шрифт равным 16px, а нам нужен 10px, поэтому 62.5% от 16px это как раз 10px.
+  Можно сразу жестко задать 10px, но тогда те пользователи,
+  которые в настройках своих браузеров увеличили шрифт по умолчанию, не увидят эффекта увелечения шрифта */
+
+  /* Если бы это свойство использовалось только для шрифтов, то его можно было разместить в папку typograpy,
+  но оно лежит тут потому-что по задумке оно используется
+  не только для шрифтов, но и для маржинов/паддингов и других размерностей устанавливаемых через rem */
+}
+
+/*прибиваем футер к полу*/
 body {
+  box-sizing: border-box;
   background-color: lightblue;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  font-size: 1.6rem;
 }
 </style>

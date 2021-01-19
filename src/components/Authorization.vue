@@ -1,13 +1,13 @@
 <template>
-  <div>
+  <div class="authorization">
     <h1>{{ msg }}</h1>
     <p>
       Страница авторизации и регистрации
     </p>
     <p>
-      Авторизирован или нет? Состояние берется из глобального Vuex store <b>{{ this.$store.state.isAuthorized }}</b>
+      Авторизирован или нет? Состояние берется из глобального Vuex store <b>{{ this.$store.state.user }}</b>
     </p>
-    <h1 v-if="this.$store.state.isAuthorized">Vue is awesome!</h1>
+    <h1 v-if="this.$store.state.user">Vue is awesome!</h1>
     <h1 v-else>Oh no 😢</h1>
     <div id="firebaseui-auth-container"></div>
   </div>
@@ -29,7 +29,7 @@ export default {
       ui = new firebaseui.auth.AuthUI(firebase.auth());
     }
     ui.start('#firebaseui-auth-container', {
-      signInSuccessUrl: '#/home',
+      signInSuccessUrl: '#/',
       signInOptions: [
         firebase.auth.EmailAuthProvider.PROVIDER_ID
       ],
@@ -49,6 +49,9 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+.authorization {
+  word-wrap: break-word;
+}
 h3 {
   margin: 40px 0 0;
 }

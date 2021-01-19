@@ -7,7 +7,9 @@ import NewNote from "./components/NewNote.vue";
 import Notes from "./components/Notes.vue";
 
 import firebase from "firebase";
-import {config as firebaseConfig} from '@/api/firebase/db.js';
+import {config as firebaseConfig} from "@/api/firebase/db";
+
+import "normalize.css/normalize.css";
 
 Vue.config.productionTip = false;
 
@@ -15,7 +17,6 @@ Vue.use(VueRouter);
 
 const routes = [
   { path: '/', component: Notes },
-  { path: '/home', component: Notes },
   { path: '/auth', component: Authorization },
   { path: '/add', component: NewNote },
 ]
@@ -27,11 +28,24 @@ const router = new VueRouter({
   routes // short for `routes: routes`
 })
 
+firebase.initializeApp(firebaseConfig);
+firebase.auth().onIdTokenChanged(function(user) {
+  if (user) {
+    // User is signed in or token was refreshed.
+    store.commit({
+      type: 'updateUser',
+      user: user
+    })
+  }
+  store.commit('appInitFinished');
+});
+
 new Vue({
   router,
   store,
   render: h => h(App),
   created() {
-    firebase.initializeApp(firebaseConfig);
+    // store.dispatch('checkLogin');
   }
 }).$mount('#app')
+

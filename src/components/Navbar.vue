@@ -6,14 +6,19 @@
       <!-- `<router-link>` will be rendered as an `<a>` tag by default -->
       <router-link to="/">Все заметки</router-link>
       <router-link to="/add">Добавить заметку</router-link>
-      <router-link to="/auth">Авторизация</router-link>
+      <router-link to="/auth">{{ msg }}</router-link>
     </div>
   </div>
 </template>
 
 <script>
 export default {
-  name: "Navbar"
+  name: "Navbar",
+  computed: {
+    msg () {
+      return this.$store.state.user ? "Выйти" : "Войти"
+    }
+  },
 }
 </script>
 
@@ -40,7 +45,7 @@ export default {
     border-radius: 5px;
     box-shadow: 1px 1px 1px rgba(0,0,0,0.1);
   }
-  a:not(a:last-child) {
+  a:not(:last-child) {
     margin-right: 55px;
   }
 </style>

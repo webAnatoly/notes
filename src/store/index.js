@@ -6,13 +6,20 @@ Vue.use(Vuex);
 const store = new Vuex.Store({
     state: {
         count: 0,
-        isAuthorized: false,
         isLoading: false,
+        isAppInitialized: false,
+        user: null,
     },
     // Remember that Mutations have to be synchronous. For asynchronous operations use Actions.
     mutations: {
         increment (state) {
             state.count++
+        },
+        updateUser (state, payload) {
+            state.user = payload.user;
+        },
+        appInitFinished (state) {
+            state.isAppInitialized = true;
         }
     },
     // регистрация actions.
@@ -25,7 +32,7 @@ const store = new Vuex.Store({
             setTimeout(() => {
                 commit('increment')
             }, 3000)
-        }
+        },
     }
 });
 
