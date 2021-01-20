@@ -21,11 +21,12 @@ name: "InfoPanel"
     padding: .5rem;
     font-family: monospace;
     text-align: left;
+    position: fixed;
+    background-color: #78b99b; /* такого же цвета как и body */
+    width: 100%;
+    box-shadow: 1px 2px 7px 1px rgba(0,0,0,0.1);
   }
   .info-panel > span:not(:last-child) {
     margin-right: 2rem;
-  }
-  .info-panel a {
-    color: ;
   }
 </style>

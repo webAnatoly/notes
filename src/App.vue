@@ -93,4 +93,7 @@ a:active {
   color: #0c5ca0;
   text-decoration: none;
 }
+.header {
+  margin-top: 6rem;
+}
 </style>
