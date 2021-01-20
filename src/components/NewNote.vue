@@ -18,7 +18,7 @@
       <p>{{this.$store.state.isSavingNoteSuccess}}</p>
     </div>
 
-    <form action="">
+    <form action="" v-if="this.$store.state.user">
 
       <label for="entry-name">Название заметки</label>
       <input type="text" id="entry-name" v-model="noteTitle">
@@ -28,6 +28,9 @@
       <input type="button" value="Сохранить" v-on:click="save">
 
     </form>
+    <div v-else>
+      <p>Чтобы добавлять заметки необходимо <router-link to="/auth">авторизироваться</router-link></p>
+    </div>
 
   </div>
 </template>
