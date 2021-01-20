@@ -32,14 +32,19 @@ firebaseApp.auth().onIdTokenChanged(function(user) {
   store.commit({
     type: 'updateUser',
     user: user ? user : null,
-  })
+  });
 
-  store.commit('appInitFinished');
+  new Vue({
+    router,
+    store,
+    render: h => h(App),
+    mounted() {
+      this.$nextTick(function () {
+        // Code that will run only after the entire view has been rendered
+        this.$store.commit('appInitFinished');
+      })
+    }
+  }).$mount('#app')
+
 });
-
-new Vue({
-  router,
-  store,
-  render: h => h(App),
-}).$mount('#app')
 

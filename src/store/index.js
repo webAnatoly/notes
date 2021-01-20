@@ -6,12 +6,14 @@ Vue.use(Vuex);
 
 const store = new Vuex.Store({
     state: {
-        isLoading: false,
         isAppInitialized: false,
         user: null,
         isSavingNoteStarted: false,
         isSavingNoteError: null,
         isSavingNoteSuccess: null,
+        isGetNotesStarted: false,
+        isGetNotesError: null,
+        isGetNotesSuccess: null,
     },
     // Remember that Mutations have to be synchronous. For asynchronous operations use Actions.
     mutations: {
@@ -19,6 +21,8 @@ const store = new Vuex.Store({
             state.user = payload.user;
         },
         appInitFinished (state) {
+            const initScreen = document.getElementById('initScreen');
+            initScreen.style.display = 'none';
             state.isAppInitialized = true;
         },
         startSavingNote(state) {
@@ -37,6 +41,9 @@ const store = new Vuex.Store({
             state.isSavingNoteStarted =false;
             state.isSavingNoteError = null;
             state.isSavingNoteSuccess = null;
+        },
+        startGetNotes(state) {
+            state.isGetNotesStarted = true;
         }
     },
     // регистрация actions.
@@ -67,7 +74,21 @@ const store = new Vuex.Store({
                 });
 
 
-        }
+        },
+        fetchNotes({state}) {
+            const db = firebaseApp.firestore();
+            db.collection("notes").where("email", "==", state.user.email)
+                .get()
+                .then(function(querySnapshot) {
+                    querySnapshot.forEach(function(doc) {
+                        // doc.data() is never undefined for query doc snapshots
+                        console.log(doc.id, " => ", doc.data());
+                    });
+                })
+                .catch(function(error) {
+                    console.log("Error getting documents: ", error);
+                });
+        },
     }
 });
 

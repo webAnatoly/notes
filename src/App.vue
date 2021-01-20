@@ -1,7 +1,6 @@
 <template>
   <div id="app">
     <InfoPanel />
-    <Overlay v-show="!this.$store.state.isAppInitialized" showMessage="Инициализация..."/>
     <div class="header">
       <h1>Хранитель заметок</h1>
       <Navbar />
@@ -19,14 +18,12 @@
 </template>
 
 <script>
-import Overlay from "@/components/Overlay";
 import InfoPanel from "@/components/InfoPanel";
 import Navbar from './components/Navbar.vue'
 
 export default {
   name: 'App',
   components: {
-    Overlay,
     InfoPanel,
     Navbar,
   },
