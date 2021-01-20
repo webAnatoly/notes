@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <InfoPanel />
-    <Overlay v-show="!this.$store.state.isAppInitialized" showLoader/>
+    <Overlay v-show="!this.$store.state.isAppInitialized" showMessage="Инициализация..."/>
     <div class="header">
       <h1>Хранитель заметок</h1>
       <Navbar />
@@ -77,7 +77,7 @@ html {
 /*прибиваем футер к полу*/
 body {
   box-sizing: border-box;
-  background-color: lightblue;
+  background-color: #78b99b;
   min-height: 100vh;
   display: flex;
   flex-direction: column;

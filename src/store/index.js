@@ -9,6 +9,7 @@ const store = new Vuex.Store({
         isLoading: false,
         isAppInitialized: false,
         user: null,
+        isSavingNoteStarted: false,
     },
     // Remember that Mutations have to be synchronous. For asynchronous operations use Actions.
     mutations: {
@@ -20,6 +21,13 @@ const store = new Vuex.Store({
         },
         appInitFinished (state) {
             state.isAppInitialized = true;
+        },
+        startSavingNote(state) {
+            state.isSavingNoteStarted = true;
+        },
+        endSavingNote(state) {
+            console.log('endSavingNote mutation');
+            state.isSavingNoteStarted = false;
         }
     },
     // регистрация actions.
@@ -33,6 +41,13 @@ const store = new Vuex.Store({
                 commit('increment')
             }, 3000)
         },
+        saveNote ({ commit }, note) {
+            commit ('startSavingNote');
+            setTimeout(()=> {
+                console.log('A\'m a note: ', note);
+                commit('endSavingNote');
+            }, 5000);
+        }
     }
 });
 

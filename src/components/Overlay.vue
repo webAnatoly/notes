@@ -1,6 +1,23 @@
 <template>
   <div class="overlay">
-    <div class="overlay__loader" v-show="showLoader">Инициализация...</div>
+    <div v-if="showLoader" class="overlay__loader">
+      <div class="lds-spinner">
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+      </div>
+    </div>
+    <div v-else-if="showMessage" class="overlay__loader">{{ showMessage }}</div>
+    <slot></slot>
   </div>
 </template>
 
@@ -11,12 +28,16 @@ export default {
     showLoader: {
       type: Boolean,
       default: false,
-    }
+    },
+    showMessage: {
+      type: String,
+      default: null,
+    },
   }
 }
 </script>
 
-<style>
+<style scoped>
   body .overlay {
     width: 100%;
     height: 100%;
