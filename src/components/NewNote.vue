@@ -1,6 +1,10 @@
 <template>
   <div class="new-note">
 
+    <div v-if="this.$store.state.isSavingNoteStarted">
+      <Overlay show-message="Сохраняем..."/>
+    </div>
+
     <div v-if="errors.length" class="new-note-validation">
       <b>Пожалуйста, устраните следующие ошибки:</b>
       <ul>
@@ -14,7 +18,7 @@
       <input type="text" id="entry-name" v-model="noteTitle">
 
       <label for="entry-description">Описание заметки</label>
-      <textarea name="" id="entry-description" cols="90" rows="30" v-model="noteDescription"></textarea>
+      <textarea name="" id="entry-description" cols="90" rows="20" v-model="noteDescription"></textarea>
       <input type="button" value="Сохранить" v-on:click="save">
 
     </form>
@@ -23,8 +27,13 @@
 </template>
 
 <script>
+import Overlay from "@/components/Overlay";
+
 export default {
   name: 'NewNote',
+  components: {
+    Overlay,
+  },
   props: {
     msg: String
   },
@@ -50,6 +59,8 @@ export default {
 
       console.log(this.noteTitle);
       console.log(this.noteDescription);
+
+      this.$store.dispatch('saveNote', {title: this.noteTitle, description: this.noteDescription});
     },
   }
 }

@@ -28,7 +28,7 @@ export default {
   components: {
     Overlay,
     InfoPanel,
-    Navbar: Navbar,
+    Navbar,
   },
 }
 </script>
