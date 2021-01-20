@@ -5,11 +5,17 @@
       <Overlay show-message="Сохраняем..."/>
     </div>
 
-    <div v-if="errors.length" class="new-note-validation">
+    <div v-if="errors.length" class="new-note-error">
       <b>Пожалуйста, устраните следующие ошибки:</b>
       <ul>
         <li v-for="error in errors" :key="error">{{ error }}</li>
       </ul>
+    </div>
+    <div v-else-if="this.$store.state.isSavingNoteError" class="new-note-error">
+      <p>{{this.$store.state.isSavingNoteError}}</p>
+    </div>
+    <div v-else-if="this.$store.state.isSavingNoteSuccess" class="new-note-success">
+      <p>{{this.$store.state.isSavingNoteSuccess}}</p>
     </div>
 
     <form action="">
@@ -57,11 +63,13 @@ export default {
         this.errors.push('Заметка не может быть пустой');
       }
 
-      console.log(this.noteTitle);
-      console.log(this.noteDescription);
-
-      this.$store.dispatch('saveNote', {title: this.noteTitle, description: this.noteDescription});
+      if (!this.errors.length) {
+        this.$store.dispatch('saveNote', {title: this.noteTitle, description: this.noteDescription});
+      }
     },
+  },
+  beforeMount() {
+    this.$store.commit('resetSavingNoteState');
   }
 }
 </script>
@@ -80,10 +88,21 @@ form {
   width: 100%;
 }
 
-.new-note-validation {
+textarea {
+  padding: 1rem;
+}
+
+.new-note-error {
   padding: 1rem;
   margin: 1rem;
   background-color: rgba(238, 113, 113, 0.5);
+  border-radius: 1rem;
+}
+
+.new-note-success {
+  padding: 1rem;
+  margin: 1rem;
+  background-color: #C9EAC8;
   border-radius: 1rem;
 }
 </style>

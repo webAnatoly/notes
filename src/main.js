@@ -6,8 +6,7 @@ import Authorization from "./components/Authorization.vue";
 import NewNote from "./components/NewNote.vue";
 import Notes from "./components/Notes.vue";
 
-import firebase from "firebase";
-import {config as firebaseConfig} from "@/api/firebase/db";
+import {firebaseApp} from "./api/firebase/db";
 
 import "normalize.css/normalize.css";
 
@@ -28,15 +27,13 @@ const router = new VueRouter({
   routes // short for `routes: routes`
 })
 
-firebase.initializeApp(firebaseConfig);
-firebase.auth().onIdTokenChanged(function(user) {
-  if (user) {
-    // User is signed in or token was refreshed.
-    store.commit({
-      type: 'updateUser',
-      user: user
-    })
-  }
+firebaseApp.auth().onIdTokenChanged(function(user) {
+
+  store.commit({
+    type: 'updateUser',
+    user: user ? user : null,
+  })
+
   store.commit('appInitFinished');
 });
 
