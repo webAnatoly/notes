@@ -14,6 +14,7 @@ const store = new Vuex.Store({
         isGetNotesStarted: false,
         isGetNotesError: null,
         isGetNotesSuccess: null,
+        notes: {},
     },
     // Remember that Mutations have to be synchronous. For asynchronous operations use Actions.
     mutations: {
@@ -44,7 +45,10 @@ const store = new Vuex.Store({
         },
         startGetNotes(state) {
             state.isGetNotesStarted = true;
-        }
+        },
+        endGetNotes(state) {
+            state.isGetNotesStarted = false;
+        },
     },
     // регистрация actions.
     // Actions - это то же самое что и mutations но только для асинхронного кода, например для запросов на сервер и т.д.
@@ -75,17 +79,27 @@ const store = new Vuex.Store({
 
 
         },
-        fetchNotes({state}) {
+        fetchNotes({commit, state}) {
             const db = firebaseApp.firestore();
-            db.collection("notes").where("email", "==", state.user.email)
+            db.collection("notes")
+                .where("email", "==", state.user.email)
+                .where("creationTimestamp", ">", 1)
                 .get()
                 .then(function(querySnapshot) {
+
+                    if (!querySnapshot.docs.length) {
+                        console.log("По указынным критериям не выбрано ни одной заметки: ", querySnapshot.docs.length);
+                    }
+
                     querySnapshot.forEach(function(doc) {
                         // doc.data() is never undefined for query doc snapshots
                         console.log(doc.id, " => ", doc.data());
+                        state.notes[doc.id] = doc.data();
                     });
+                    commit('endGetNotes');
                 })
                 .catch(function(error) {
+                    commit('endGetNotes');
                     console.log("Error getting documents: ", error);
                 });
         },
