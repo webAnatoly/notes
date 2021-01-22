@@ -5,7 +5,7 @@
         <p>дата создания: <b>{{ getCreationDate }}</b></p>
       </div>
       <div class="note-header__right-container">
-        <p>прошло с момента создания: <b>в разработке</b></p>
+        <p>прошло с момента создания: <b>{{ getDuration }}</b></p>
       </div>
     </div>
     <div class="note-title">
@@ -18,6 +18,12 @@
 </template>
 
 <script>
+import mixinDateMethods from "@/mixins/MixinDateMethods.js";
+import dayjs from 'dayjs'
+import duration from 'dayjs/plugin/duration'
+import relativeTime from 'dayjs/plugin/relativeTime'
+import 'dayjs/locale/ru'
+
 export default {
   name: "Note",
   props: {
@@ -25,10 +31,47 @@ export default {
     description: String,
     creationTimestamp: Number,
   },
+  mixins: [mixinDateMethods],
   computed: {
-    getCreationDate: function () {
+    getCreationDate: function() {
       const options = { year: 'numeric', month: 'long', day: 'numeric' };
       return (new Date(this.creationTimestamp)).toLocaleDateString('ru', options);
+    },
+    getDuration: function() {
+      dayjs.extend(duration);
+      dayjs.extend(relativeTime);
+
+      let result = "";
+
+      const lengthOfTime = Date.now() - this.creationTimestamp;
+
+      const durations = dayjs.duration(lengthOfTime);
+
+      if (!(durations.$d && durations.$d.minutes >= 0)) {
+        return "ошибка вычисления времени";
+      }
+
+      if (durations.$d.years > 0) {
+        result += `${durations.$d.years}${this.mixinDateMethods_Humanize(durations.$d.years, 'years')} `;
+      }
+
+      if (durations.$d.months > 0) {
+        result += `${durations.$d.months}${this.mixinDateMethods_Humanize(durations.$d.months, 'months')} `;
+      }
+
+      if (durations.$d.days > 0) {
+        result += `${durations.$d.days}${this.mixinDateMethods_Humanize(durations.$d.days, 'days')} `;
+      }
+
+      if (durations.$d.hours > 0) {
+        result += `${durations.$d.hours}${this.mixinDateMethods_Humanize(durations.$d.hours, 'hours')} `;
+      }
+
+      if (durations.$d.minutes > 0) {
+        result += `${durations.$d.minutes}${this.mixinDateMethods_Humanize(durations.$d.minutes, 'minutes')} `;
+      }
+
+      return result;
     }
   }
 }
