@@ -93,7 +93,7 @@ const store = new Vuex.Store({
 
                     querySnapshot.forEach(function(doc) {
                         // doc.data() is never undefined for query doc snapshots
-                        console.log(doc.id, " => ", doc.data());
+                        // console.log(doc.id, " => ", doc.data());
                         state.notes[doc.id] = doc.data();
                     });
                     commit('endGetNotes');
