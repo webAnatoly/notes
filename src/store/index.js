@@ -15,6 +15,7 @@ const store = new Vuex.Store({
         isGetNotesError: null,
         isGetNotesSuccess: null,
         notes: {},
+        isSortDesc: true,
     },
     // Remember that Mutations have to be synchronous. For asynchronous operations use Actions.
     mutations: {
@@ -80,10 +81,16 @@ const store = new Vuex.Store({
 
         },
         fetchNotes({commit, state}) {
+
             const db = firebaseApp.firestore();
+            let orderName = "creationTimestamp";
+            const orderDirection = state.isSortDesc ? "desc" : "asc";
+
             db.collection("notes")
                 .where("email", "==", state.user.email)
                 .where("creationTimestamp", ">", 1)
+                .orderBy(orderName, orderDirection)
+                .limit(5000)// [TO DO] сделать пагинацию
                 .get()
                 .then(function(querySnapshot) {
 

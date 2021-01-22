@@ -30,6 +30,7 @@ export default {
     title: String,
     description: String,
     creationTimestamp: Number,
+    documentId: String, // это id под которым в Firestore сохранена заметка. Он понадобится для реализации редактирования и удаления заметки.
   },
   mixins: [mixinDateMethods],
   data: function() {

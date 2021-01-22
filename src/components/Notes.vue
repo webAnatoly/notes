@@ -5,7 +5,7 @@
     </div>
     <Spinner v-else-if="this.$store.state.isGetNotesStarted" color="#78b99b" scale="2" style="margin-top: 11rem"/>
     <div v-else-if="Object.keys(this.$store.state.notes).length > 0" v-for="(val, key) in this.$store.state.notes" :key="key">
-      <Note :title="val.title" :description="val.description" :creation-timestamp="val.creationTimestamp"/>
+      <Note :title="val.title" :description="val.description" :creation-timestamp="val.creationTimestamp" :documentId="key"/>
     </div>
     <div v-else>
       Не удалось получить заметки. Возможные причины:
