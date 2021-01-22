@@ -32,6 +32,12 @@ export default {
     creationTimestamp: Number,
   },
   mixins: [mixinDateMethods],
+  data: function() {
+    return {
+      now: Date.now(),
+      intervalId: null,
+    }
+  },
   computed: {
     getCreationDate: function() {
       const options = { year: 'numeric', month: 'long', day: 'numeric' };
@@ -43,12 +49,18 @@ export default {
 
       let result = "";
 
-      const lengthOfTime = Date.now() - this.creationTimestamp;
+      const lengthOfTime = this.now - this.creationTimestamp;
 
       const durations = dayjs.duration(lengthOfTime);
 
+      const oneMinute = 1000 * 60;
+
       if (!(durations.$d && durations.$d.minutes >= 0)) {
         return "ошибка вычисления времени";
+      }
+
+      if (lengthOfTime < oneMinute) {
+        return "несколько секунд назад";
       }
 
       if (durations.$d.years > 0) {
@@ -72,6 +84,17 @@ export default {
       }
 
       return result;
+    }
+  },
+  mounted() {
+    const self = this;
+    this.intervalId = setInterval(function() {
+      self.$data.now = Date.now();
+    }, 1000);
+  },
+  beforeUnmount() {
+    if (this.intervalId) {
+      clearInterval(this.intervalId);
     }
   }
 }

@@ -17,8 +17,6 @@ export default {
             const n = number%10;
 
             switch (n) {
-                case 0:
-                    return "";
                 case 1:
                     return words[entityName][0];
                 case 2:
