@@ -1,14 +1,31 @@
 <template>
   <div class="info-panel">
-    <span v-if="this.$store.state.user">вы вошли как: <b>{{this.$store.state.user.displayName}}</b></span>
-    <span v-if="this.$store.state.user">ваш емейл: <b>{{this.$store.state.user.email}}</b></span>
-    <span v-if="!this.$store.state.user">вы не <router-link to="/auth">авторизированы</router-link></span>
+    <span v-if="isAuthorized">вы вошли как: <b>{{displayName}}</b></span>
+    <span v-if="this.$store.state.user">ваш емейл: <b>{{email}}</b></span>
+    <span v-if="!isAuthorized">вы не <router-link to="/auth">авторизированы</router-link></span>
   </div>
 </template>
 
 <script>
 export default {
-name: "InfoPanel"
+  name: "InfoPanel",
+  computed: {
+    isAuthorized: function() {
+      return !!this.$store.state.user;
+    },
+    email: function() {
+      if (this.$store.state.user !== null) {
+        return this.$store.state.user.displayName;
+      }
+      return '';
+    },
+    displayName: function() {
+      if (this.$store.state.user !== null) {
+        return this.$store.state.user.displayName;
+      }
+      return '';
+    }
+  }
 }
 </script>
 

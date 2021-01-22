@@ -1,6 +1,6 @@
 <template>
   <div class="notes">
-    <div v-if="!this.$store.state.user">
+    <div v-if="!isAuthorized">
       <p>Чтобы просматривать заметки необходимо <router-link to="/auth">авторизироваться</router-link></p>
     </div>
     <Spinner v-else-if="this.$store.state.isGetNotesStarted" color="#78b99b" scale="2" style="margin-top: 11rem"/>
@@ -28,9 +28,16 @@ export default {
     Note,
   },
   beforeCreate() {
-    this.$store.commit('startGetNotes');
-    this.$store.dispatch('fetchNotes');
+    if (this.$store.state.user) {
+      this.$store.commit('startGetNotes');
+      this.$store.dispatch('fetchNotes');
+    }
   },
+  computed: {
+    isAuthorized: function() {
+      return !!this.$store.state.user;
+    },
+  }
 }
 </script>
 
