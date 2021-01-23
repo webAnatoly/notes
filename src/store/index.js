@@ -50,6 +50,9 @@ const store = new Vuex.Store({
         endGetNotes(state) {
             state.isGetNotesStarted = false;
         },
+        updateNotes(state, payload) {
+            state.notes = payload.notes;
+        }
     },
     // регистрация actions.
     // Actions - это то же самое что и mutations но только для асинхронного кода, например для запросов на сервер и т.д.
@@ -98,10 +101,13 @@ const store = new Vuex.Store({
                         console.log("По указынным критериям не выбрано ни одной заметки: ", querySnapshot.docs.length);
                     }
 
+                    const notes = {};
+
                     querySnapshot.forEach(function(doc) {
                         // doc.data() is never undefined for query doc snapshots
                         // console.log(doc.id, " => ", doc.data());
-                        state.notes[doc.id] = doc.data();
+                        notes[doc.id] = doc.data();
+                        commit('updateNotes', {notes});
                     });
                     commit('endGetNotes');
                 })

@@ -1,5 +1,5 @@
 <template>
-  <div class="note">
+  <div class="note" v-on:click="edit">
     <div class="note-header">
       <div class="note-header__left-container">
         <p>дата создания: <b>{{ getCreationDate }}</b></p>
@@ -85,6 +85,14 @@ export default {
       }
 
       return result;
+    }
+  },
+  methods: {
+    edit: function(event) {
+      console.log("event: ", event);
+      console.log("data:", this.now);
+      console.log("props:", this.documentId);
+      console.log(event.target);
     }
   },
   mounted() {
