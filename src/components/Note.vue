@@ -1,5 +1,5 @@
 <template>
-  <div class="note" v-on:click="edit">
+  <div class="note">
     <div class="note-header">
       <div class="note-header__left-container">
         <p>дата создания: <b>{{ getCreationDate }}</b></p>
@@ -14,10 +14,23 @@
     <div class="note-body">
       {{ description }}
     </div>
+    <div class="note-footer">
+      <Button :on-click="onClickEditBtn" v-bind:styles="styleButtons" class="note__button">
+        <AnimatedIconPencil icon-name="редактировать" icon-color="lightgrey" />
+      </Button>
+      <Button :on-click="onClickDeleteBtn" v-bind:styles="styleButtons" class="note__button">
+        <AnimatedIconGarbage icon-name="удалить" icon-color="lightgrey" />
+      </Button>
+    </div>
   </div>
 </template>
 
 <script>
+import AnimatedIconGarbage from "@/components/animatedicons/AnimatedIconGarbage";
+import AnimatedIconPencil from "@/components/animatedicons/AnimatedIconPencil";
+
+import Button from "@/components/Button";
+
 import mixinDateMethods from "@/mixins/MixinDateMethods.js";
 import dayjs from 'dayjs'
 import duration from 'dayjs/plugin/duration'
@@ -37,6 +50,13 @@ export default {
     return {
       now: Date.now(),
       intervalId: null,
+      styleButtons: {
+        backgroundColor: '#f5f5dc',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        border: '1px solid transparent',
+      }
     }
   },
   computed: {
@@ -88,11 +108,11 @@ export default {
     }
   },
   methods: {
-    edit: function(event) {
-      console.log("event: ", event);
-      console.log("data:", this.now);
-      console.log("props:", this.documentId);
-      console.log(event.target);
+    onClickEditBtn: function() {
+      console.log('onClickEditBtn');
+    },
+    onClickDeleteBtn: function() {
+      console.log('onClickDeleteBtn');
     }
   },
   mounted() {
@@ -105,6 +125,11 @@ export default {
     if (this.intervalId) {
       clearInterval(this.intervalId);
     }
+  },
+  components: {
+    AnimatedIconPencil,
+    AnimatedIconGarbage,
+    Button,
   }
 }
 </script>
@@ -123,7 +148,7 @@ export default {
     justify-content: space-between;
     align-items: flex-start;
     flex-wrap: wrap;
-    font-size: 1.4rem;
+    font-size: 1.3rem;
     font-family: monospace;
     font-style: italic;
   }
@@ -148,7 +173,18 @@ export default {
     padding: 4px 0 10px 0;
   }
   .note-body {
-    /*padding: 1rem;*/
+    padding-top: 1rem;
+    padding-bottom: 1rem;
     text-align: left;
+    min-height: 1rem;
+  }
+  .note-footer {
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  .note__button:hover {
+    border: 1px solid grey!important;
+    transform: scale(1.3);
   }
 </style>
