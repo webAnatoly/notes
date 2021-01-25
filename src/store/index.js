@@ -14,6 +14,7 @@ const store = new Vuex.Store({
         isGetNotesStarted: false,
         isGetNotesError: null,
         isGetNotesSuccess: null,
+        isDeleteNoteStarted: false,
         notes: {},
         isSortDesc: true,
         currentlyEditableNote: null,
@@ -59,6 +60,12 @@ const store = new Vuex.Store({
         },
         endEditingNote(state) {
             state.currentlyEditableNote = null;
+        },
+        deleteNoteStarted(state) {
+            state.isDeleteNoteStarted = true;
+        },
+        deleteNoteFinished(state) {
+            state.isDeleteNoteStarted = false;
         }
     },
     // регистрация actions.
@@ -116,6 +123,27 @@ const store = new Vuex.Store({
                 });
 
             // commit('savingNoteError', {msg: "Ошибка сохранения заметки!"});
+        },
+        deleteNote({ commit, state }, note) {
+
+            commit('deleteNoteStarted');
+
+            const db = firebaseApp.firestore();
+
+            db.collection("notes").doc(note.documentId).delete().then(function() {
+                // console.log("Document successfully deleted!");
+
+                const notes = Object.assign({}, state.notes);
+                delete notes[note.documentId];
+
+                commit("updateNotes", {notes});
+                commit("deleteNoteFinished");
+
+            }).catch(function(error) {
+                console.error("Error removing document: ", error);
+                commit("deleteNoteFinished");
+            });
+
         },
         fetchNotes({commit, state}) {
 
