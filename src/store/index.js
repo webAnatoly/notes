@@ -141,8 +141,8 @@ const store = new Vuex.Store({
                         // doc.data() is never undefined for query doc snapshots
                         // console.log(doc.id, " => ", doc.data());
                         notes[doc.id] = doc.data();
-                        commit('updateNotes', {notes});
                     });
+                    commit('updateNotes', {notes});
                     commit('endGetNotes');
                 })
                 .catch(function(error) {
