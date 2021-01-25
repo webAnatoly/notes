@@ -114,12 +114,14 @@ const store = new Vuex.Store({
                 .then(function() {
                     commit('savingNoteSuccess', {msg: "Заметка успешно обновлена!"});
                     commit('endSavingNote');
+                    commit('endEditingNote');
                 })
                 .catch(function(error) {
                     // The document probably doesn't exist.
                     console.error("Error updating document: ", error);
                     commit('savingNoteError', {msg: "Ошибка обновления заметки!"});
                     commit('endSavingNote');
+                    commit('endEditingNote');
                 });
 
             // commit('savingNoteError', {msg: "Ошибка сохранения заметки!"});

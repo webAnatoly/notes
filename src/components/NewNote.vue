@@ -82,6 +82,9 @@ export default {
       this.noteTitle = this.$store.state.currentlyEditableNote.title;
       this.noteDescription = this.$store.state.currentlyEditableNote.description;
     }
+  },
+  mounted() {
+    this.$store.commit('endEditingNote')
   }
 }
 </script>
