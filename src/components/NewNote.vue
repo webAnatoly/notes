@@ -83,7 +83,7 @@ export default {
       this.noteDescription = this.$store.state.currentlyEditableNote.description;
     }
   },
-  mounted() {
+  destroyed() {
     this.$store.commit('endEditingNote')
   }
 }
