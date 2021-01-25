@@ -67,12 +67,21 @@ export default {
       }
 
       if (!this.errors.length) {
-        this.$store.dispatch('saveNote', {title: this.noteTitle, description: this.noteDescription});
+
+        if (this.$store.state.currentlyEditableNote) {
+          this.$store.dispatch('saveNoteAfterEditing', {title: this.noteTitle, description: this.noteDescription});
+        } else {
+          this.$store.dispatch('saveNote', {title: this.noteTitle, description: this.noteDescription});
+        }
       }
     },
   },
   beforeMount() {
     this.$store.commit('resetSavingNoteState');
+    if (this.$store.state.currentlyEditableNote) {
+      this.noteTitle = this.$store.state.currentlyEditableNote.title;
+      this.noteDescription = this.$store.state.currentlyEditableNote.description;
+    }
   }
 }
 </script>

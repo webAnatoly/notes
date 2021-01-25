@@ -109,10 +109,18 @@ export default {
   },
   methods: {
     onClickEditBtn: function() {
-      console.log('onClickEditBtn');
+      const note = {
+        title: this.title,
+        description: this.description,
+        documentId: this.documentId,
+      }
+      this.$store.commit('startEditingNote', note)
+      this.$router.push({ path: 'add' }) // перенаправляем на форму добавления заметку.
+      // В поля этой формы подставятся данные из заметки на которой был клик
     },
     onClickDeleteBtn: function() {
-      console.log('onClickDeleteBtn');
+      console.log('onClickDeleteBtn!');
+      // this.documentId // TO DO dispatch action и передавать ID заметки, которую нужно удалять
     }
   },
   mounted() {

@@ -16,6 +16,7 @@ const store = new Vuex.Store({
         isGetNotesSuccess: null,
         notes: {},
         isSortDesc: true,
+        currentlyEditableNote: null,
     },
     // Remember that Mutations have to be synchronous. For asynchronous operations use Actions.
     mutations: {
@@ -52,6 +53,12 @@ const store = new Vuex.Store({
         },
         updateNotes(state, payload) {
             state.notes = payload.notes;
+        },
+        startEditingNote(state, note) {
+            state.currentlyEditableNote = note;
+        },
+        endEditingNote(state) {
+            state.currentlyEditableNote = null;
         }
     },
     // регистрация actions.
@@ -82,6 +89,33 @@ const store = new Vuex.Store({
                 });
 
 
+        },
+        saveNoteAfterEditing({ commit, state }, note) {
+
+            if (!state.user) { return }
+
+            commit ('startSavingNote');
+
+            const db = firebaseApp.firestore();
+
+            const currentNote = db.collection("notes").doc(state.currentlyEditableNote.documentId);
+
+            currentNote.update({
+                title: note.title,
+                description: note.description,
+            })
+                .then(function() {
+                    commit('savingNoteSuccess', {msg: "Заметка успешно обновлена!"});
+                    commit('endSavingNote');
+                })
+                .catch(function(error) {
+                    // The document probably doesn't exist.
+                    console.error("Error updating document: ", error);
+                    commit('savingNoteError', {msg: "Ошибка обновления заметки!"});
+                    commit('endSavingNote');
+                });
+
+            // commit('savingNoteError', {msg: "Ошибка сохранения заметки!"});
         },
         fetchNotes({commit, state}) {
 
