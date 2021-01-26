@@ -18,6 +18,8 @@ const store = new Vuex.Store({
         notes: {},
         isSortDesc: true,
         currentlyEditableNote: null,
+        infoPanelHeight: 30, // высота верхней инфо-панели. Будет определяться в хуке компонента mounted.
+        initialStickMenuCoordinates: { top: 207 } // изначальные координаты прилипающего меню. Будет определяться в хуке компонента mounted.
     },
     // Remember that Mutations have to be synchronous. For asynchronous operations use Actions.
     mutations: {
@@ -66,6 +68,12 @@ const store = new Vuex.Store({
         },
         deleteNoteFinished(state) {
             state.isDeleteNoteStarted = false;
+        },
+        writeInfoPanelHeight(state, height) {
+            state.infoPanelHeight = height;
+        },
+        writeStickMenuCoordinates(state, coordinates) {
+            state.initialStickMenuCoordinates = Object.assign({}, coordinates);
         }
     },
     // регистрация actions.

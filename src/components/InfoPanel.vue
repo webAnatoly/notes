@@ -1,5 +1,5 @@
 <template>
-  <div class="info-panel">
+  <div class="info-panel" ref="infoPanel">
     <span v-if="isAuthorized">вы вошли как: <b>{{displayName}}</b></span>
     <span v-if="this.$store.state.user">ваш емейл: <b>{{email}}</b></span>
     <span v-if="!isAuthorized">вы не <router-link to="/auth">авторизированы</router-link></span>
@@ -25,6 +25,11 @@ export default {
       }
       return '';
     }
+  },
+  mounted: function() {
+    // Определить высоту компонента и записать в store
+    const infoPanelHeight = this.$refs.infoPanel.offsetHeight;
+    this.$store.commit('writeInfoPanelHeight', infoPanelHeight)
   }
 }
 </script>
