@@ -119,13 +119,10 @@ export default {
       // В поля этой формы подставятся данные из заметки на которой был клик
     },
     onClickDeleteBtn: function() {
-      console.log('onClickDeleteBtn!');
       const note = {
         documentId: this.documentId,
       }
       this.$store.dispatch('deleteNote', note);
-      console.log('note from note', note);
-      // this.documentId // TO DO dispatch action и передавать ID заметки, которую нужно удалять
     }
   },
   mounted() {

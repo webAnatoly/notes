@@ -15,11 +15,12 @@ const store = new Vuex.Store({
         isGetNotesError: null,
         isGetNotesSuccess: null,
         isDeleteNoteStarted: false,
-        notes: {},
-        isSortDesc: true,
+        notes: [],
+        isSortDesc: true, // направление сортировки. От текущей даты к более ранним датам.
         currentlyEditableNote: null,
         infoPanelHeight: 30, // высота верхней инфо-панели. Будет определяться в хуке компонента mounted.
-        initialStickMenuCoordinates: { top: 207 } // изначальные координаты прилипающего меню. Будет определяться в хуке компонента mounted.
+        initialStickMenuCoordinates: { top: 207 }, // изначальные координаты прилипающего меню. Будет определяться в хуке компонента mounted.
+        isSortingStarted: false,
     },
     // Remember that Mutations have to be synchronous. For asynchronous operations use Actions.
     mutations: {
@@ -74,6 +75,12 @@ const store = new Vuex.Store({
         },
         writeStickMenuCoordinates(state, coordinates) {
             state.initialStickMenuCoordinates = Object.assign({}, coordinates);
+        },
+        sortingStarted(state) {
+            state.isSortingStarted = true;
+        },
+        sortingFinished(state) {
+            state.isSortingStarted = false;
         }
     },
     // регистрация actions.
@@ -143,10 +150,17 @@ const store = new Vuex.Store({
             db.collection("notes").doc(note.documentId).delete().then(function() {
                 // console.log("Document successfully deleted!");
 
-                const notes = Object.assign({}, state.notes);
-                delete notes[note.documentId];
+                /* Эта часть кода сработает в случае если на бэкенде удаление заметки прошло успешно.
+                    Чтобы не перезагружать страницу и не делать лишний запрос на сервер, здесь мы
+                    просто удаляем эту заметку из массива store. */
 
-                commit("updateNotes", {notes});
+                const notes = Object.assign([], state.notes);
+
+                let indexToRemove = notes.find(n => n.documentId === note.documentId); // находим индекс записи, которую хотим удалить
+
+                notes.splice(indexToRemove, 1) // удаляем из массива запись
+
+                commit("updateNotes", {notes}); // обновляем заметки в нашем store
                 commit("deleteNoteFinished");
 
             }).catch(function(error) {
@@ -173,12 +187,14 @@ const store = new Vuex.Store({
                         console.log("По указынным критериям не выбрано ни одной заметки: ", querySnapshot.docs.length);
                     }
 
-                    const notes = {};
+                    const notes = [];
 
                     querySnapshot.forEach(function(doc) {
                         // doc.data() is never undefined for query doc snapshots
                         // console.log(doc.id, " => ", doc.data());
-                        notes[doc.id] = doc.data();
+                        const note = doc.data();
+                        note.documentId = doc.id;
+                        notes.push(note);
                     });
                     commit('updateNotes', {notes});
                     commit('endGetNotes');
@@ -187,6 +203,35 @@ const store = new Vuex.Store({
                     commit('endGetNotes');
                     console.log("Error getting documents: ", error);
                 });
+        },
+        sortingByDate({commit, state}, sortDirection) {
+
+            commit('sortingStarted');
+
+            if (!state.notes || state.notes.length === 0) {
+                commit('sortingFinished');
+                return;
+            }
+            const copiedNotes = Object.assign([], state.notes);
+
+            if (sortDirection === 'ASC') {
+                // do ASC sort
+                copiedNotes.sort(function(note1, note2){
+                    if (note1.creationTimestamp > note2.creationTimestamp) return 1;
+                    if (note1.creationTimestamp === note2.creationTimestamp) return 0;
+                    if (note1.creationTimestamp < note2.creationTimestamp) return -1;
+                });
+            } else {
+                // do DESC sort
+                copiedNotes.sort(function(note1, note2){
+                    if (note1.creationTimestamp < note2.creationTimestamp) return 1;
+                    if (note1.creationTimestamp === note2.creationTimestamp) return 0;
+                    if (note1.creationTimestamp > note2.creationTimestamp) return -1;
+                });
+            }
+            const payload = {notes: copiedNotes};
+            commit('updateNotes', payload);
+            commit('sortingFinished');
         },
     }
 });
