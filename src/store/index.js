@@ -156,7 +156,7 @@ const store = new Vuex.Store({
 
                 const notes = Object.assign([], state.notes);
 
-                let indexToRemove = notes.find(n => n.documentId === note.documentId); // находим индекс записи, которую хотим удалить
+                let indexToRemove = notes.findIndex(n => n.documentId === note.documentId); // находим индекс записи, которую хотим удалить
 
                 notes.splice(indexToRemove, 1) // удаляем из массива запись
 
@@ -213,23 +213,24 @@ const store = new Vuex.Store({
                 return;
             }
             const copiedNotes = Object.assign([], state.notes);
+            let sorted = [];
 
             if (sortDirection === 'ASC') {
                 // do ASC sort
-                copiedNotes.sort(function(note1, note2){
+                sorted = copiedNotes.sort(function(note1, note2){
                     if (note1.creationTimestamp > note2.creationTimestamp) return 1;
                     if (note1.creationTimestamp === note2.creationTimestamp) return 0;
                     if (note1.creationTimestamp < note2.creationTimestamp) return -1;
                 });
             } else {
                 // do DESC sort
-                copiedNotes.sort(function(note1, note2){
+                sorted = copiedNotes.sort(function(note1, note2){
                     if (note1.creationTimestamp < note2.creationTimestamp) return 1;
                     if (note1.creationTimestamp === note2.creationTimestamp) return 0;
                     if (note1.creationTimestamp > note2.creationTimestamp) return -1;
                 });
             }
-            const payload = {notes: copiedNotes};
+            const payload = {notes: sorted};
             commit('updateNotes', payload);
             commit('sortingFinished');
         },
