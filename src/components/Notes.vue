@@ -1,12 +1,13 @@
 <template>
   <div class="notes">
-    <div class="stick-menu" ref="stickMenu" v-bind:class="{ 'stick-menu--stick': isPanelAttached }">
+    <div v-if="isAuthorized" class="stick-menu" ref="stickMenu" v-bind:class="{ 'stick-menu--stick': isPanelAttached }">
       <Button v-bind:onClick="sortByDate">Сортировать по дате
         <span v-if="sortDirection === 'ASC'">&#9662;</span>
         <span v-else>&#9652;</span>
       </Button>
     </div>
-    <div v-if="!isAuthorized">
+
+    <div v-if="!isAuthorized" v-bind:style="{padding: isAuthorized ? '' : '3rem'}">
       <p>Чтобы просматривать заметки необходимо <router-link to="/auth">авторизироваться</router-link></p>
     </div>
     <Spinner v-else-if="this.$store.state.isGetNotesStarted" color="#78b99b" scale="2" style="margin-top: 11rem"/>
@@ -50,16 +51,19 @@ export default {
     window.addEventListener('scroll', this.handleScroll);
   },
   mounted () {
-    const stickMenuCoordinates = this.$refs.stickMenu.getBoundingClientRect();
 
-    const rect = {
-      top: stickMenuCoordinates.top,
-      bottom: stickMenuCoordinates.bottom,
-      left: stickMenuCoordinates.left,
-      right: stickMenuCoordinates.right,
+    if (this.$refs.stickMenu) {
+      const stickMenuCoordinates = this.$refs.stickMenu.getBoundingClientRect();
+
+      const rect = {
+        top: stickMenuCoordinates.top,
+        bottom: stickMenuCoordinates.bottom,
+        left: stickMenuCoordinates.left,
+        right: stickMenuCoordinates.right,
+      }
+
+      this.$store.commit('writeStickMenuCoordinates', rect);
     }
-
-    this.$store.commit('writeStickMenuCoordinates', rect);
 
   },
   destroyed () {
